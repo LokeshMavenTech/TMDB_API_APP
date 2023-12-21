@@ -11,24 +11,23 @@ import app.scrollfrom.tmdb_api_app.repositories.MovieRepository;
 
 public class MovieListViewModel extends ViewModel {
 
-    // this class is used for VIEWMODEL
-
-
-
     private MovieRepository movieRepository;
 
 
-
-
-
-    // constructor
-
-
-    public MovieListViewModel() {
-        movieRepository= MovieRepository.getInstance();
-
+    //    Constructor
+    public MovieListViewModel(){
+        movieRepository = MovieRepository.getInstance();
     }
+
     public LiveData<List<MovieModel>> getMovies(){
         return movieRepository.getMovies();
     }
+
+    public void searchMovieApi(String query, int pageNumber){
+        movieRepository.searchMovieApi(query, pageNumber);
+    }
+
+     public void  searchNextpage(){
+        movieRepository.searchNextPage();
+     }
 }
