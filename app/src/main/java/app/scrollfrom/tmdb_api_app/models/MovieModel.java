@@ -12,16 +12,19 @@ public class MovieModel implements Parcelable {
     //    Model class for movies
     private String title;
     private String backdrop_path;
+    private  String poster_path;
     private String release_date;
     @SerializedName("id")
     private int movie_id;
     private float vote_average;
+    
     private String movie_overview;
     private String original_language;
 
-    public MovieModel(String title, String backdrop_path, String release_date, int movie_id, float vote_average, String movie_overview, String original_language) {
+    public MovieModel(String title, String backdrop_path,String poster_path, String release_date, int movie_id, float vote_average, String movie_overview, String original_language) {
         this.title = title;
         this.backdrop_path = backdrop_path;
+        this.poster_path=poster_path;
         this.release_date = release_date;
         this.movie_id = movie_id;
         this.vote_average = vote_average;
@@ -44,6 +47,7 @@ public class MovieModel implements Parcelable {
     protected MovieModel(Parcel in) {
         title = in.readString();
         backdrop_path = in.readString();
+        poster_path =in.readString();
         release_date = in.readString();
         movie_id = in.readInt();
         vote_average = in.readFloat();
@@ -71,6 +75,7 @@ public class MovieModel implements Parcelable {
     public String getbackdrop_path() {
         return backdrop_path;
     }
+    public String getPoster_path(){return poster_path;}
 
     public String getRelease_date() {
         return release_date;
@@ -104,6 +109,7 @@ public class MovieModel implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(title);
         dest.writeString(backdrop_path);
+        dest.writeString(poster_path);
         dest.writeString(release_date);
         dest.writeInt(movie_id);
         dest.writeFloat(vote_average);

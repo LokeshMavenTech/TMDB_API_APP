@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -119,7 +120,21 @@ public class MovieListActivity extends AppCompatActivity implements OnMovieListe
 // it is use for click the movie
     @Override
     public void onMovieClick(int position) {
+
 //        Toast.makeText(this, "The Position : "+position, Toast.LENGTH_SHORT).show();
+        // we don't need position of the movie in recyclerView
+        //WE NEED THE ID OF THE MOVIE IN ORDER TO GET ALL IT'S DETAILS
+        Intent intent =new Intent(this,MovieDetails.class);
+        intent.putExtra("movie", movieRecyclerViewAdapter.getSelectedMovie(position));
+        startActivity(intent);
+
+
+
+
+
+
+
+
     }
 
     @Override
