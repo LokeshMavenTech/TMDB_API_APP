@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+<color name="black">#FF000000</color>
+<color name="white">#FFFFFFFF</color>
+<color name="yellow_star_color">#FFD700</color>
+<color name="bottom_nav_icon_color">#673AB7</color>
+<color name="bottom_nav_text_color">#000000</color>
+<color name="transparent_white">#80FFFFFF</color>
+@color/bottom_nav_text_color
 </resources>
