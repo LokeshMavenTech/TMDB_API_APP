@@ -27,6 +27,14 @@ public class MovieApiClient {
     //making  Global runnable
     private RetriveMoviesRunnable retriveMoviesRunnable;
 
+    //    Live data for popular movies
+    private MutableLiveData<List<MovieModel>> mMoviesPop;
+
+
+    private RetriveMoviesRunnablePop retriveMoviesRunnablePop;
+
+
+
     public static MovieApiClient getInstance() {
         if (instance == null) {
             instance = new MovieApiClient();
@@ -36,10 +44,17 @@ public class MovieApiClient {
 
     private MovieApiClient() {
         mMovies = new MutableLiveData<>();
+        mMoviesPop = new MutableLiveData<>();
     }
+
+
 
     public LiveData<List<MovieModel>> getMovies() {
         return mMovies;
+    }
+
+    public LiveData<List<MovieModel>> getMoviesPop() {
+        return mMoviesPop;
     }
 
 
@@ -59,7 +74,23 @@ public class MovieApiClient {
         }, 3000, TimeUnit.MILLISECONDS);
     }
 
-    //Retreving data from RestApi by runnable class
+    public void searchMoviesPop(int pageNumber) {
+
+        if (retriveMoviesRunnablePop!=null){
+            retriveMoviesRunnablePop=null;
+        }
+
+        retriveMoviesRunnablePop = new RetriveMoviesRunnablePop(pageNumber);
+        final Future myHandler2 = AppExecutors.getInstance().networkIO().submit(retriveMoviesRunnablePop);
+        AppExecutors.getInstance().networkIO().schedule(new Runnable() {
+            @Override
+            public void run() {
+                myHandler2.cancel(true);
+            }
+        }, 1000, TimeUnit.MILLISECONDS);
+    }
+
+    //Retrieving data from RestApi by runnable class
     private class RetriveMoviesRunnable implements Runnable {
 
         private String query;
@@ -121,8 +152,63 @@ public class MovieApiClient {
             cancelRequest=true;
         }
     }
+
+    private class RetriveMoviesRunnablePop implements Runnable {
+
+        private int pageNumber;
+        boolean cancelRequest;
+
+        public RetriveMoviesRunnablePop(int pageNumber) {
+            this.pageNumber = pageNumber;
+            this.cancelRequest = cancelRequest;
+        }
+
+        @Override
+        public void run() {
+            try{
+                Response response2=getPop(pageNumber).execute();
+                if(cancelRequest){
+                    return;
+                }
+                if(response2.code()==200){
+                    List<MovieModel>list=new ArrayList<>(((MovieSearchResponse)response2.body()).getMovies());
+//                    Sending data to live data
+//                    Post value for background thread
+//                    Set value not for background thread
+                    if(pageNumber==1){
+                        mMoviesPop.postValue(list);
+                    }
+                    else{
+                        List<MovieModel>currentMovies=mMoviesPop.getValue();
+                        currentMovies.addAll(list);
+                        mMoviesPop.postValue(currentMovies);
+                    }
+
+                }
+                else{
+                    String  error=response2.errorBody().string();
+                    Log.v("Tag","Error"+error);
+                    mMoviesPop.postValue(null);
+                }
+
+            }
+            catch (IOException e){
+                e.printStackTrace();
+                mMoviesPop.postValue(null);
+            }
+        }
+
+        private Call<MovieSearchResponse> getPop(int pageNumber){
+            Servicey service=new Servicey();
+            return service.getMovieApi().getPopular(
+                    Credentials.API_KEY,
+                    pageNumber
+            );
+
+        }
+        private void CancelRequest(){
+            Log.v("Tag","Cancelling Search Request");
+            cancelRequest=true;
+        }
+    }
 }
-
-
-
-

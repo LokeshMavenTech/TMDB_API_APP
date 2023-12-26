@@ -33,7 +33,7 @@ public class MovieRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof MovieViewHolder) {
+        if (holder instanceof MovieViewHolder){
             MovieModel currentMovie = mMovies.get(position);
             MovieViewHolder movieViewHolder = (MovieViewHolder) holder;
 
@@ -45,26 +45,36 @@ public class MovieRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                 // Set release date
                 if (movieViewHolder.movie_category != null) {
-                    movieViewHolder.movie_category.setText(currentMovie.getRelease_date());
+                    movieViewHolder.movie_category.setText("" + currentMovie.getOriginal_language());
                 }
 
                 // Set duration
                 if (movieViewHolder.duration != null) {
-                    movieViewHolder.duration.setText(" " + currentMovie.getMovie_id());
+                    movieViewHolder.duration.setText(" " + currentMovie.getMovie_overview());
                 }
 
                 // Set rating
                 if (movieViewHolder.ratingBar != null) {
                     movieViewHolder.ratingBar.setRating((currentMovie.getVote_average()) / 2);
                 }
+            }
+            // Load image using Glide
+            if (movieViewHolder.imageView != null) {
+//                Glide.with(movieViewHolder.itemView.getContext())
+//                        .load("https://image.tmdb.org/t/p/original/" + currentMovie.getBackdrop_path())
+//                        .into(movieViewHolder.imageView);
 
-                // Load image using Glide
-                if (movieViewHolder.imageView != null) {
-                    Glide.with(movieViewHolder.itemView.getContext())
-                            .load("https://image.tmdb.org/t/p/w500/" + currentMovie.getbackdrop_path())
-                            .into(movieViewHolder.imageView);
-                }}}}
+                Glide.with(movieViewHolder.itemView.getContext())
+                        .load("https://image.tmdb.org/t/p/original/"
+                                + currentMovie.getPoster_path())
+                        .into(movieViewHolder.imageView);
 
+
+
+            }
+        }
+
+    }
 
     @Override
     public int getItemCount() {
@@ -84,10 +94,9 @@ public class MovieRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHol
         notifyDataSetChanged();
     }
 
-    // GETTING THE ID OF THE  MOVIE CLOCKED
-    public  MovieModel getSelectedMovie(int position){
-        if(mMovies != null){
-            if(mMovies.size()>0) {
+    public MovieModel getSelectedMovie(int position){
+        if (mMovies != null){
+            if (mMovies.size() > 0){
                 return mMovies.get(position);
             }
         }

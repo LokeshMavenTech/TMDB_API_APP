@@ -27,8 +27,8 @@
             app:srcCompat="@drawable/fullphoto" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="482dp"
+            android:layout_width="1309dp"
+            android:layout_height="536dp"
             android:background="@drawable/shadow_back"
             android:orientation="vertical"
             android:paddingLeft="16dp"
@@ -36,11 +36,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView_details">
+            app:layout_constraintTop_toBottomOf="@+id/imageView_details"
+
+            >
 
             <TextView
                 android:id="@+id/textView_title_details"
-                android:layout_width="match_parent"
+                android:layout_width="304dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
                 android:padding="12dp"
@@ -50,16 +52,21 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView_details" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView_details"
+
+
+                />
 
             <TextView
                 android:id="@+id/textViewVote"
-                android:layout_width="match_parent"
+                android:layout_width="468dp"
                 android:layout_height="58dp"
                 android:padding="5dp"
+                android:text="TextView"
                 android:textColor="#CDB9B9"
                 android:textSize="20sp"
-                android:text="TextView" />
+
+                />
 
             <RatingBar
                 android:id="@+id/ratingBar_details"
@@ -72,12 +79,15 @@
                 android:scaleY="0.75"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_title_details" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_title_details"
+
+
+                />
 
             <TextView
-                android:id="@+id/textView_desc_details"
-                android:layout_width="match_parent"
-                android:layout_height="58dp"
+                android:id="@+id/movieRunTime"
+                android:layout_width="474dp"
+                android:layout_height="68dp"
                 android:padding="5dp"
                 android:text="TextView"
                 android:textSize="20sp"
@@ -87,6 +97,30 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ratingBar_details"
                 app:layout_constraintVertical_bias="0.288" />
+            <TextView
+                android:id="@+id/releseDate"
+                android:layout_width="474dp"
+                android:layout_height="68dp"
+                android:padding="5dp"
+                android:text="TextView"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.506"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ratingBar_details"
+                app:layout_constraintVertical_bias="0.288" />
+
+
+            <TextView
+                android:id="@+id/movie_overView"
+                android:layout_width="334dp"
+                android:layout_height="130dp"
+                android:ellipsize="end"
+                android:lines="3"
+                android:maxLines="3"
+                android:text="TextView"
+                android:textSize="20sp" />
 
         </LinearLayout>
     </LinearLayout>
