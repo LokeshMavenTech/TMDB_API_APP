@@ -71,10 +71,17 @@ public class MovieDetails extends AppCompatActivity {
 
 //            Log.v("Tag", "X" + movieModel.getMovie_overview());
 
+//            Glide.with(this)
+//                    .load("https://image.tmdb.org/t/p/original/"
+//                            + movieModel.getBackdrop_path())
+//                    .into(imageViewDetails);
+
+
             Glide.with(this)
-                    .load("https://image.tmdb.org/t/p/original/"
-                            + movieModel.getBackdrop_path())
+                    .load("https://image.tmdb.org/t/p/original/" + movieModel.getBackdrop_path())
+                    .placeholder(R.drawable.defult_movie) // Set the default image resource
                     .into(imageViewDetails);
+
 
         }
 

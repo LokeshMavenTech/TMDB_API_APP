@@ -33,6 +33,11 @@ public class MovieApiClient {
 
     private RetriveMoviesRunnablePop retriveMoviesRunnablePop;
 
+    ///i add some data
+    private MutableLiveData<List<MovieModel>> mMoviesTopRated;
+
+    private RetriveMoviesRunnableTopRated retriveMoviesRunnableTopRated;
+
 
 
     public static MovieApiClient getInstance() {
@@ -44,6 +49,10 @@ public class MovieApiClient {
 
     private MovieApiClient() {
         mMovies = new MutableLiveData<>();
+
+        ///// i add
+        mMoviesTopRated=new MutableLiveData<>();
+
         mMoviesPop = new MutableLiveData<>();
     }
 
@@ -56,7 +65,11 @@ public class MovieApiClient {
     public LiveData<List<MovieModel>> getMoviesPop() {
         return mMoviesPop;
     }
-
+//// i add some code
+public LiveData<List<MovieModel>> getMovieTopRated() {
+    return mMoviesTopRated;
+}
+/////////
 
     public void searchMoviesApi(String query, int pageNumber) {
 
@@ -86,6 +99,21 @@ public class MovieApiClient {
             @Override
             public void run() {
                 myHandler2.cancel(true);
+            }
+        }, 1000, TimeUnit.MILLISECONDS);
+    }
+    public void searchMoviesTopRated(int pageNumber) {
+
+        if (retriveMoviesRunnablePop!=null){
+            retriveMoviesRunnablePop=null;
+        }
+
+        retriveMoviesRunnableTopRated = new RetriveMoviesRunnableTopRated(pageNumber);
+        final Future myHandler3 = AppExecutors.getInstance().networkIO().submit(retriveMoviesRunnableTopRated);
+        AppExecutors.getInstance().networkIO().schedule(new Runnable() {
+            @Override
+            public void run() {
+                myHandler3.cancel(true);
             }
         }, 1000, TimeUnit.MILLISECONDS);
     }
@@ -211,4 +239,65 @@ public class MovieApiClient {
             cancelRequest=true;
         }
     }
+    /////// i addd some code
+    private class RetriveMoviesRunnableTopRated implements Runnable {
+
+        private int pageNumber;
+        boolean cancelRequest;
+
+        public RetriveMoviesRunnableTopRated(int pageNumber) {
+            this.pageNumber = pageNumber;
+            this.cancelRequest = cancelRequest;
+        }
+
+
+        @Override
+        public void run() {
+            try{
+                Response response3 = getTopRated(pageNumber).execute();
+                if(cancelRequest){
+                    return;
+                }
+                if(response3.code()==200){
+                    List<MovieModel>list=new ArrayList<>(((MovieSearchResponse)response3.body()).getMovies());
+//                    Sending data to live data
+//                    Post value for background thread
+//                    Set value not for background thread
+                    if(pageNumber==1){
+                        mMoviesTopRated.postValue(list);
+                    }
+                    else{
+                        List<MovieModel>currentMovies=mMoviesTopRated.getValue();
+                        currentMovies.addAll(list);
+                        mMoviesTopRated.postValue(currentMovies);
+                    }
+
+                }
+                else{
+                    String  error=response3.errorBody().string();
+                    Log.v("Tag","Error"+error);
+                    mMoviesTopRated.postValue(null);
+                }
+
+            }
+            catch (IOException e){
+                e.printStackTrace();
+                mMoviesTopRated.postValue(null);
+            }
+        }
+
+        private Call<MovieSearchResponse> getTopRated(int pageNumber) {
+            Servicey service = new Servicey();
+            return service.getMovieApi().getTopRated(
+                    Credentials.API_KEY,
+                    pageNumber
+            );
+        }
+        private void CancelRequest(){
+            Log.v("TAg","Cancelling Search Request");
+            cancelRequest=true;
+        }
+    }
+
+
 }

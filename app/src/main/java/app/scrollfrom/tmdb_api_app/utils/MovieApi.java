@@ -26,6 +26,15 @@ public interface MovieApi {
             @Query("api_key")String api_key,
             @Query("page") int page
     );
+/// add by me
+    @GET("3/movie/top_rated")
+    Call<MovieSearchResponse> getTopRated(
+            @Query("api_key")String api_key,
+            @Query("page") int page
+    );
+
+
+///////////
 
     //    making search with id
     @GET("3/movie/{movie_id}?")

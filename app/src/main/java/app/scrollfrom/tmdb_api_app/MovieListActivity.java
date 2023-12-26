@@ -19,6 +19,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +43,14 @@ public class MovieListActivity extends AppCompatActivity implements OnMovieListe
     private RecyclerView recyclerView;
     private MovieRecyclerView movieRecyclerViewAdapter;
 
+    /// add by me
+    BottomNavigationView bottomNavigationView;
+    BottomNavigationItemView bottomNavigationItemView;
+    BottomNavigationItemView bottomNavigationItemView1;
+    //////////
     //    ViewModel
     private MovieListViewModel movieListViewModel;
+
 
     boolean isPopular = true;
 
@@ -61,9 +70,30 @@ public class MovieListActivity extends AppCompatActivity implements OnMovieListe
         ConfigureRecyclerView();
         ObserveAnyChange();
 
-        ObservePopularMovies();
+        //ObservePopularMovies();
+       ObserveTopRatedMovies();
 
         movieListViewModel.searchMoviePop(1);
+        movieListViewModel.searchMovieTopRated(1);
+        ///// add by me
+        bottomNavigationView=findViewById(R.id.bottom_navigation);
+        bottomNavigationItemView=findViewById(R.id.top_rated);
+        bottomNavigationItemView1 =findViewById(R.id.home);
+
+
+        bottomNavigationItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ObservePopularMovies();
+            }
+        });
+        bottomNavigationItemView1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ObserveTopRatedMovies();
+            }
+        });
+        ////////
 
 //        searchMovieApi("war",1);
 
@@ -83,8 +113,23 @@ public class MovieListActivity extends AppCompatActivity implements OnMovieListe
             }
         });
     }
+    private void ObserveTopRatedMovies() {
+        movieListViewModel.getTopRated().observe(this, new Observer<List<MovieModel>>() {
+            @Override
+            public void onChanged(List<MovieModel> movieModels) {
+                // Observing for any data change
+                if (movieModels != null) {
+                    for (MovieModel movieModel : movieModels) {
+                        Log.v("Tag", "Name: " + movieModel.getTitle());
+                        movieRecyclerViewAdapter.setmMovies(movieModels);
+                    }
+                }
+            }
+        });
 
-    //Observing any data change
+    }
+
+        //Observing any data change
     private void ObserveAnyChange() {
 
         movieListViewModel.getMovies().observe(this, new Observer<List<MovieModel>>() {
@@ -118,9 +163,22 @@ public class MovieListActivity extends AppCompatActivity implements OnMovieListe
                 if (!recyclerView.canScrollVertically(1)) {
                     // Display the next results from the API
                     movieListViewModel.searchNextPage();
+
                 }
             }
         });
+        // i add some c0de
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if (!recyclerView.canScrollVertically(1)) {
+                    // Display the next results from the API
+                    movieListViewModel.searchNextPage();
+
+                }
+            }
+        });
+        /////////////////////////////////////////
     }
 
     @Override

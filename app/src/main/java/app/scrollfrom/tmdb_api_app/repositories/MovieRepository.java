@@ -17,6 +17,10 @@ public class MovieRepository {
 
     private String mQuery;
     private int mPageNumber;
+    //// i add some code
+    private String hQuery;
+    private int hPageNumber;
+    ///////////
 
     public static MovieRepository getInstance(){
         if(instance == null){
@@ -36,6 +40,9 @@ public class MovieRepository {
     public LiveData<List<MovieModel>> getPop(){
         return movieApiClient.getMoviesPop();
     }
+    public LiveData<List<MovieModel>> getTopRated(){
+        return movieApiClient.getMovieTopRated();
+    }
 
     public void searchMovieApi(String query, int pageNumber){
 
@@ -50,6 +57,19 @@ public class MovieRepository {
         movieApiClient.searchMoviesPop(pageNumber);
 
     }
+    public void searchMovieTopRated(int pageNumber){
+        mPageNumber = pageNumber;
+        movieApiClient.searchMoviesTopRated(pageNumber);
+    }
+//// i add some code
+//    public void homeSearchMovieApi(String query, int pageNumber){
+//
+//        hQuery = query;
+//        hPageNumber = pageNumber;
+//        movieApiClient.s
+//
+//    }
+//    //////////
 
     public void searchNextPage(){
         searchMovieApi(mQuery, mPageNumber+1);
