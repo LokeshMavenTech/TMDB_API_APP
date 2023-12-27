@@ -54,10 +54,12 @@ public class MovieDetails extends AppCompatActivity {
             duration.setText("Runtime : " +movieModel.getRuntime()+" Mins");
 
             vote.setText("Vote count : "+ movieModel.getVote_count());
-//            ratingBarDetails.setRating("rating"+movieModel.getVote_average());
+//          ratingBarDetails.setRating("rating"+movieModel.getVote_average());
 
-//           OD.setText(" " + movieModel.getMovie_overview());
+         //  overviewDetails.setText(" " + movieModel.getMovie_overview());
             releseDate.setText("Release Date : " + movieModel.getRelease_date());
+
+
             if (movieModel != null) {
                 String overview = movieModel.getMovie_overview();
                 if (!TextUtils.isEmpty(overview.trim())) {

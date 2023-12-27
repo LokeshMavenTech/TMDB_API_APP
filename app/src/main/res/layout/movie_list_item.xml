@@ -40,6 +40,7 @@
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
+
                 <TextView
                     android:id="@+id/movie_category"
                     android:layout_width="0dp"
@@ -48,6 +49,10 @@
                     android:drawableTop="@drawable/baseline_star_rate_24"
                     android:gravity="start"
                     android:textSize="14sp" />
+
+
+
+
 
 
             </LinearLayout>

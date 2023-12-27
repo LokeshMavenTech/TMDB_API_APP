@@ -104,20 +104,20 @@ public LiveData<List<MovieModel>> getMovieTopRated() {
     }
     public void searchMoviesTopRated(int pageNumber) {
 
-        if (retriveMoviesRunnablePop!=null){
-            retriveMoviesRunnablePop=null;
+        if (retriveMoviesRunnableTopRated != null) {
+            retriveMoviesRunnableTopRated = null;
         }
 
-        retriveMoviesRunnableTopRated = new RetriveMoviesRunnableTopRated(pageNumber);
-        final Future myHandler3 = AppExecutors.getInstance().networkIO().submit(retriveMoviesRunnableTopRated);
-        AppExecutors.getInstance().networkIO().schedule(new Runnable() {
-            @Override
-            public void run() {
-                myHandler3.cancel(true);
-            }
-        }, 1000, TimeUnit.MILLISECONDS);
-    }
+            retriveMoviesRunnableTopRated = new RetriveMoviesRunnableTopRated(pageNumber);
+            final Future myHandler3 = AppExecutors.getInstance().networkIO().submit(retriveMoviesRunnableTopRated);
+            AppExecutors.getInstance().networkIO().schedule(new Runnable() {
+                @Override
+                public void run() {
+                    myHandler3.cancel(true);
+                }
+            }, 1000, TimeUnit.MILLISECONDS);
 
+    }
     //Retrieving data from RestApi by runnable class
     private class RetriveMoviesRunnable implements Runnable {
 

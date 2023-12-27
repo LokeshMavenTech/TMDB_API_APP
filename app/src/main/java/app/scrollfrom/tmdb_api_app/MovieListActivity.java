@@ -51,8 +51,10 @@ public class MovieListActivity extends AppCompatActivity implements OnMovieListe
     //    ViewModel
     private MovieListViewModel movieListViewModel;
 
-
-    boolean isPopular = true;
+    private int nextPageForPop = 1;
+   private int nextPageForTopRated = 1;
+       boolean isPopular = true ;
+     boolean isTopRated =true ;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -82,17 +84,25 @@ public class MovieListActivity extends AppCompatActivity implements OnMovieListe
 
 
         bottomNavigationItemView.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View v) {
+
                 ObservePopularMovies();
+                bottomNavigationItemView.setChecked(true);
+
             }
         });
         bottomNavigationItemView1.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View v) {
                 ObserveTopRatedMovies();
+                bottomNavigationItemView1.setChecked(true);
             }
         });
+
+
         ////////
 
 //        searchMovieApi("war",1);
@@ -157,28 +167,59 @@ public class MovieListActivity extends AppCompatActivity implements OnMovieListe
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         // Loading next pages
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                if (!recyclerView.canScrollVertically(1)) {
+//                    // Display the next results from the API
+//                    Log.d("ScrollListener", "Reached bottom of RecyclerView");
+//                    movieListViewModel.searchNextPage();
+//
+//                    }
+//                }
+//            });
+//            // i add some c0de
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                @Override
+//                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                    if (!recyclerView.canScrollVertically(1)) {
+//                        // Display the next results from the API
+//                        movieListViewModel.searchNextPage();
+//
+//                    }
+//                }
+//            });
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (!recyclerView.canScrollVertically(1)) {
-                    // Display the next results from the API
-                    movieListViewModel.searchNextPage();
+                super.onScrollStateChanged(recyclerView, newState);
+                GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisible = layoutManager.findLastVisibleItemPosition();
 
+                if (lastVisible + 1 == totalItemCount) {
+                    if (isPopular) {
+                        movieListViewModel.searchMoviePop(nextPageForPop);
+                        nextPageForPop++;
+                    } else if (isTopRated) {
+                        movieListViewModel.searchMovieTopRated(nextPageForTopRated);
+                        nextPageForTopRated ++;
+
+                    }
                 }
             }
         });
-        // i add some c0de
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (!recyclerView.canScrollVertically(1)) {
-                    // Display the next results from the API
-                    movieListViewModel.searchNextPage();
 
-                }
-            }
-        });
-        /////////////////////////////////////////
+
+
+
+
+
+        /////////
+
+
+            /////////////////////////////////////////
     }
 
     @Override
